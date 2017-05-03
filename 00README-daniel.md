@@ -17,19 +17,32 @@ I installed this in a separate cloud9 container as there appeared to be conflict
 # Generate the files needed
 First create topojson files and then geojson files for import.
 ## Cantons
-make topo/ch-cantons.json REPROJECT=true PROPERTIES=name,abbr
+make topo/ch-cantons.json REPROJECT=true PROPERTIES=name,abbr,id
 node_modules/.bin/topo2geo cantons=topo/ch-cantons-geo.json < topo/ch-cantons.json
+## Postleitzahlen
+make topo/ch-plz.json REPROJECT=true
+node_modules/.bin/topo2geo plz=topo/ch-plz-geo.json < topo/ch-plz.json
+## Municipalities
+make topo/ch-municipalities.json REPROJECT=true PROPERTIES=name,id
+node_modules/.bin/topo2geo municipalities=topo/ch-municipalities-geo.json < topo/ch-municipalities.json
 
+
+# Simplify parameter
+make topo/ch-cantons.json REPROJECT=true PROPERTIES=name,abbr SIMPLIFY=0.00000005
 
 
 
 
 # Examples
 Orte mit Namen:
-  make topo/ch-municipalities.json REPROJECT=true PROPERTIES=name
+  make topo/ch-municipalities.json REPROJECT=true PROPERTIES=name,id
 Zipcode:
   make topo/ch-plz.json REPROJECT=true
-Districts (name doesn't work, I guess there is no district name)
+Districts (name doesn't work, I guess there is no district name), see here in makefile:
+      ##########
+      # Currently without names because joining to build/districts.tsv prevents the 'canton' property to be set on districts where it's needed (i.e. districts with BEZIRKSNR = 0)
+      build/ch-districts-unmerged.json: build/ch/municipalities-without-lakes.shp
+      ##########
   make topo/ch-districts.json REPROJECT=true PROPERTIES=name
 
 
