@@ -1,3 +1,20 @@
+####################################################################
+# What we actually need to do to create files for rentmap
+make clean
+make topo/ch.json PROPERTIES=name,abbr,id
+
+This is easy and created all we need (country, lakes, cantons, municipalities) 
+in one file so nothing is shifted against each other.
+Also we get 
+for cantons PROPERTIES=name,abbr,id
+for municipalities PROPERTIES=name,id
+this gets simply projected into an 960x500 box which is ok,
+alles OHNE REPROJECT=true
+
+==> resulting files are in topo/
+####################################################################
+
+
 # INSTALLATION
 I installed this in a separate cloud9 container as there appeared to be conflicts between the gdal installation and the existing postgresql/postgis installation.
 
@@ -56,9 +73,3 @@ https://gis.stackexchange.com/questions/60928/how-to-insert-a-geojson-polygon-in
 
 
 
-
-# What we actually need to do to create files for rentmap
-make clean
-make topo/ch-cantons.json REPROJECT=true PROPERTIES=name,abbr,id
-make topo/ch-municipalities.json REPROJECT=true PROPERTIES=name,id
-make topo/ch-lakes.json REPROJECT=true
